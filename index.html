@@ -1,0 +1,161 @@
+<!doctype html>
+<!-- MISSION 10 Answer: bangkokth -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MISSION001</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="scanline"></div>
+
+    <div id="screen-intro" class="screen active">
+      <div class="intro-grid"></div>
+      <div class="intro-corner tl"></div>
+      <div class="intro-corner tr"></div>
+      <div class="intro-corner bl"></div>
+      <div class="intro-corner br"></div>
+      <div class="intro-content">
+        <div class="intro-badge"> MISSION...001 </div>
+        <h1 class="intro-title">ภารกิจตามหา<br />สายรหัสส</h1>
+        <p class="intro-sub">// อย่าพึ่งกดเริ่มนะ อ่านข้างล่างก่อน!!! //</p>
+        <p class="intro-desc">
+          คุณได้รับมอบหมายภารกิจลับสุดยอด เพื่อรวบรวมเบาะแสในการตามหาสายรหัส<br />
+          ก่อนจะกดเริ่มภารกิจพี่อยากจะบอกว่า ลองเปิดแต่ละมิชชั่นก่อนนะ เพราะเรามี skip จำกัด<br />
+          ดังนั้นดูก่อนว่าควรใช้กับข้อไหน ที่สำคัญคำใบ้แต่ละอันอาจจะไม่ได้หมายถึงแค่คนที่น้องตามหา<br />
+          อาจจะใบ้ถึงทุกคนในสายรหัสนะ (👾สู้ๆ พี่เป็นกำลังใจให้👾)
+        </p>
+        <button class="btn" onclick="startGame()">
+          <span>▶ เริ่มภารกิจ</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="screen-map" class="screen">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">กองบัญชาการลับ</div>
+          <div class="agent-info">
+            รหัสนักสืบ: <span class="agent-id" id="agentId">AGT-0000</span><br />สถานะ: ปฏิบัติการภาคสนาม
+          </div>
+        </div>
+        <div class="progress-section">
+          <div class="progress-label">
+            <span>MISSION PROGRESS</span><span id="progressText">0 / 10</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="hint-panel">
+          <div class="hint-panel-title">◈ คำใบ้ที่รวบรวมได้</div>
+          <div id="hintsList"></div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="skip-counter">
+            SKIPS REMAINING: <span id="skipsLeft" class="text-accent">2</span>
+          </div>
+          <button class="btn-sm" onclick="showScreen('screen-intro')">← BACKSLIDE</button>
+          <button class="btn-sm" onclick="openNameStage()" style="border-color: var(--warn); color: var(--warn)">
+            ◈ ใครคือรุ่นพี่คนนั้นนะ?
+          </button>
+        </div>
+      </div>
+      <div class="map-area">
+        <div class="map-header">
+          <h1>MISSION MAP</h1>
+          <p>ALL MISSIONS UNLOCKED — COMPLETE IN ANY ORDER</p>
+        </div>
+        <div class="level-grid" id="levelGrid"></div>
+      </div>
+    </div>
+
+    <div id="screen-game" class="screen">
+      <div class="game-sidebar">
+        <div>
+          <div class="game-level-num" id="gameLevelNum">MISSION 01</div>
+          <div class="game-level-title" id="gameLevelTitle">Loading...</div>
+        </div>
+        <div class="timer-ring">
+          <div>
+            <div class="timer-value" id="timerValue">30</div>
+            <div class="timer-label">SECONDS</div>
+          </div>
+          <div style="flex: 1">
+            <div class="timer-label">TIME LEFT</div>
+            <div class="progress-bar" style="margin-top: 6px">
+              <div class="progress-fill" id="timerBar" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="game-instructions">
+          <div class="instructions-title">◈ INSTRUCTIONS</div>
+          <div class="instructions-text" id="gameInstructions">Loading...</div>
+        </div>
+        <div class="hint-panel">
+          <div class="hint-panel-title">◈ INTEL SO FAR</div>
+          <div id="sideHintsList" style="max-height: 180px; overflow-y: auto"></div>
+        </div>
+        <div class="game-actions">
+          <button class="btn-sm" id="skipBtn" onclick="skipLevel()">
+            ⚡ SKIP (<span id="skipCount">2</span>)
+          </button>
+          <button class="btn-sm" onclick="goToMap()">← BACK TO MAP</button>
+        </div>
+      </div>
+      <div class="game-main">
+        <div class="game-container" id="gameContainer"></div>
+      </div>
+    </div>
+
+    <div id="screen-final" class="screen">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">INTEL DOSSIER</div>
+          <div class="agent-info">ALL COLLECTED CLUES</div>
+        </div>
+        <div class="hint-panel">
+          <div class="hint-panel-title">◈ ALL COLLECTED INTEL</div>
+          <div id="finalHintsList"></div>
+        </div>
+        <div class="sidebar-footer">
+          <button class="btn-sm" onclick="goToMap()">← BACK TO MAP</button>
+        </div>
+      </div>
+      <div class="final-main">
+        <div class="final-title">◈ ใครคือรุ่นพี่คนนั้นนะ? ◈</div>
+        <div class="final-sub">// ลองพิมพ์ชื่อดูสิ //</div>
+        <div class="final-input-area">
+          <input
+            class="final-input"
+            type="text"
+            id="finalAnswer"
+            placeholder="ลองใส่ชื่อมาๆๆ..."
+            maxlength="80"
+            oninput="onNameInput()"
+            autocomplete="off"
+          />
+          <div class="final-response" id="finalResponse"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="completionOverlay">
+      <div class="completion-box">
+        <div class="completion-icon">◉</div>
+        <div class="completion-title" id="completionTitle">MISSION COMPLETE</div>
+        <div class="completion-text" id="completionText">Intel secured.</div>
+        <div class="hint-reveal" id="completionHintReveal">
+          <div class="hint-reveal-label" id="hintRevealLabel">◈ INTEL UNLOCKED</div>
+          <div class="hint-reveal-value" id="completionHintValue"></div>
+        </div>
+        <button class="btn" onclick="nextLevel()">
+          <span>▶ CONTINUE</span>
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
